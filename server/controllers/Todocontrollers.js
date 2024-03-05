@@ -2,7 +2,6 @@ const TodoModel = require("../models/toDoSchema");
 const jwt = require("jsonwebtoken");
 const jwtKey = process.env.JWT_SECRECT_KEY;
 
-
 const getTodo = async (req, res) => {
   try {
     const toDo = await TodoModel.find();
@@ -17,7 +16,6 @@ const saveTodo = async (req, res) => {
     const { text } = req.body;
     console.log(text);
     const data = await TodoModel.create({ text });
-
     res.send(data);
   } catch (error) {
     res.send(error);
