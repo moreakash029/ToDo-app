@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const routes = require("./routes/ToDoRoutes");
 const EmployeeModel = require("./models/employee");
+const { verifyToken } = require("./controllers/Todocontrollers");
 
 const jwtKey = process.env.JWT_SECRECT_KEY;
 
@@ -20,7 +21,7 @@ mongoose
 
 app.use(routes);
 
-app.post("/login", async (req, res) => {
+app.post("/login",async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await EmployeeModel.findOne({
@@ -69,12 +70,8 @@ app.post("/register", (req, res) => {
   });
 });
 
-
-
-
 const PORT = 3001;
 
 app.listen(PORT, () => {
   console.log("server is connected");
 });
-

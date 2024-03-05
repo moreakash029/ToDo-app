@@ -1,48 +1,69 @@
 import axios from "axios";
 
+const getAllToDo = (setToDo) => {
+    const token = localStorage.getItem("token");
+    // console.log(token);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  axios.get("http://localhost:3001/",config).then((data) => {
+    console.log("data ----->", data.data);
+    setToDo(data.data);
+  })
+};
 
-const baseUrl = "http://localhost:3001"
-
-const getAllToDo = (setToDo)=>{
-    axios
-    .get("http://localhost:3001/")
-    .then((data)=> {
-        console.log('data ----->',data.data);
-        setToDo(data.data)
+const addToDo = (text, setText, setToDo) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  axios
+    .post("http://localhost:3001/save", { text }, config)
+    .then((data) => {
+      console.log(data);
+      setText("");
+      getAllToDo(setToDo);
     })
-}
+    .catch((err) => console.log(err));
+};
 
-const addToDo = (text,setText,setToDo)=>{
-    axios
-    .post("http://localhost:3001/save", {text})
-    .then((data)=>{
-        console.log(data);
-        setText("")
-        getAllToDo(setToDo)
+const updateToDo = (toDoId, text, setToDo, setText, setIsUpdating) => {
+  const token = localStorage.getItem("token");
+  console.log("====>", token);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  axios
+    .post("http://localhost:3001/update", { _id: toDoId, text }, config)
+    .then((data) => {
+      console.log(data);
+      setText("");
+      setIsUpdating(false);
+      getAllToDo(setToDo);
     })
-    .catch((err)=> console.log(err))
-}
+    .catch((err) => console.log(err));
+};
 
-const updateToDo = (toDoId,text,setToDo,setText,setIsUpdating)=>{
-    axios
-    .post("http://localhost:3001/update", {_id:toDoId,text})
-    .then((data)=>{
-        console.log(data);
-        setText("")
-        setIsUpdating(false)
-        getAllToDo(setToDo)
+const deleteTodo = (_id, setToDo, key) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  axios
+    .post("http://localhost:3001/delete", { _id }, config)
+    .then((data) => {
+      console.log(data);
+      getAllToDo(setToDo);
     })
-    .catch((err)=> console.log(err))
-}
+    .catch((err) => console.log(err));
+};
 
-const deleteTodo = (_id,setToDo)=>{
-    axios
-    .post("http://localhost:3001/delete", {_id})
-    .then((data)=>{
-        console.log(data);
-        getAllToDo(setToDo)
-    })
-    .catch((err)=> console.log(err))
-}
-
-export {getAllToDo,addToDo,updateToDo,deleteTodo}
+export { getAllToDo, addToDo, updateToDo, deleteTodo };

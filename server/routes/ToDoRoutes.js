@@ -4,10 +4,10 @@ const {getTodo, saveTodo, updateTodo, deleteTodo, verifyToken} = require('../con
 
 const router = Router();
 
-router.get("/",getTodo)
-router.post("/save",saveTodo)
-router.post("/update",updateTodo)
-router.post("/delete",deleteTodo)
+router.get("/",verifyToken,getTodo)
+router.post("/save",verifyToken,saveTodo)
+router.post("/update",verifyToken,updateTodo)
+router.post("/delete",verifyToken,deleteTodo)
 
 
 module.exports = router;

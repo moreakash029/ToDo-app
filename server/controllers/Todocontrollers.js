@@ -1,21 +1,26 @@
+const { config } = require("dotenv");
 const TodoModel = require("../models/toDoSchema");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const jwtKey = process.env.JWT_SECRECT_KEY;
 
 const getTodo = async (req, res) => {
-  try {
-    const toDo = await TodoModel.find();
+  
+    const email = req.decoded.email
+    try {
+    const toDo = await TodoModel.find({email});
     res.send(toDo);
   } catch (error) {
     res.send(error);
   }
 };
 
+
 const saveTodo = async (req, res) => {
   try {
     const { text } = req.body;
-    console.log(text);
-    const data = await TodoModel.create({ text });
+    const email = req.decoded.email
+    const data = await TodoModel.create({ text,email });
     res.send(data);
   } catch (error) {
     res.send(error);
@@ -38,7 +43,7 @@ const deleteTodo = async (req, res) => {
     await TodoModel.findByIdAndDelete(_id);
     res.send("Deleted Sucessfully.....");
   } catch (error) {
-    res.send(err);
+    res.send(error);
   }
 };
 
@@ -46,17 +51,18 @@ function verifyToken(req, res, next) {
   try {
     const token = req?.headers?.authorization?.split(" ")[1];
     if (token) {
-      jwt.verify(token, jwtKey, (err, valid) => {
+      jwt.verify(token, jwtKey, (err, valid) => { 
+        console.log(valid);
         if (err) {
           res.send("Please provide valid token");
         } else {
-          req.decoded = decoded;
+          req.decoded = valid;
           next();
         }
       });
     }
   } catch (error) {
-    res.send(err);
+    res.send(error);
   }
 }
 
