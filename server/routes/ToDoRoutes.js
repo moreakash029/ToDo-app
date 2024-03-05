@@ -1,5 +1,5 @@
 const {Router} = require("express")
-const {getTodo, saveTodo, updateTodo, deleteTodo} = require('../controllers/Todocontrollers')
+const {getTodo, saveTodo, updateTodo, deleteTodo, verifyToken} = require('../controllers/Todocontrollers')
 
 
 const router = Router();

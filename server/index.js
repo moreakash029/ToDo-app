@@ -50,7 +50,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email } = req.body;
-  EmployeeModel.findOne({ name: name , email: email} ).then((user) => {
+  EmployeeModel.findOne({ name: name, email: email }).then((user) => {
     if (user) {
       if (user.name === name) {
         res.json("Username already exists");
@@ -70,24 +70,9 @@ app.post("/register", (req, res) => {
 });
 
 
-function verifyToken(req,res,next){
-  let token = req.headers['authorization']
-  if(token){
-    token = token.split(' ')[1]
-    jwt.verify(token,jwtKey,(err,valid)=>{
-      if(err){
-        res.send("Please provide valid token")
-      }else{
-        next();
-      }
-      })
-  }else{
-    res.send("Please provide token with headers")
-  }
-}
-
 const PORT = 3001;
 
 app.listen(PORT, () => {
   console.log("server is connected");
 });
+
